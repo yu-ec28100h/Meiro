@@ -4,73 +4,54 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    Transform tf;   // Main CameraのTransform
-    Camera cam;     // Main CameraのCamera
-    Rigidbody hrb;  // Human(親オブジェクト)のRigidbody
+    Transform tf; //Main CameraのTransform
+    Camera cam; //Main CameraのCamera
+    Rigidbody hrb; //Human（親オブジェクト）のRigidbody
 
-    // Start is called before the first frame update
     void Start()
     {
-        tf = this.gameObject.GetComponent<Transform>();
-        cam = this.gameObject.GetComponent<Camera>();
-        hrb = transform.parent.gameObject.GetComponent<Rigidbody>();
+        tf = this.gameObject.GetComponent<Transform>(); //Main CameraのTransformを取得する。
+        cam = this.gameObject.GetComponent<Camera>(); //Main CameraのCameraを取得する。
+        hrb = transform.parent.gameObject.GetComponent<Rigidbody>(); //Human（親オブジェクト）のRigidbodyを取得する。
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        if(!(Input.GetKey(KeyCode.LeftShift)) &&
-             (Input.GetKey(KeyCode.UpArrow)))
+        if (!(Input.GetKey(KeyCode.LeftShift)) && Input.GetKey(KeyCode.UpArrow)) //上キーが押されていれば
         {
-            // 人を前進させる
-            hrb.position = hrb.position + (transform.forward * Time.deltaTime * 7.0f);
+            hrb.position = hrb.position + (transform.forward * Time.deltaTime * 7.0f); //人を前進させる。
         }
-        else if(!(Input.GetKey(KeyCode.LeftShift)) &&
-                 (Input.GetKey(KeyCode.DownArrow)))
+        else if (!(Input.GetKey(KeyCode.LeftShift)) && Input.GetKey(KeyCode.DownArrow)) //下キーが押されていれば
         {
-            // 人を後ずさり
-            hrb.position = hrb.position - (transform.forward * Time.deltaTime * 7.0f);
+            hrb.position = hrb.position - (transform.forward * Time.deltaTime * 7.0f); //人を後ずさりさせる。
         }
-
-        if (!(Input.GetKey(KeyCode.LeftShift)) &&
-             (Input.GetKey(KeyCode.LeftArrow)))
+        if (!(Input.GetKey(KeyCode.LeftShift)) && Input.GetKey(KeyCode.LeftArrow)) //左キーが押されていれば
         {
-            // 人を左へカニ歩き
-            hrb.position = hrb.position - (transform.right * Time.deltaTime * 7.0f);
+            hrb.position = hrb.position - (transform.right * Time.deltaTime * 7.0f); //人を左へカニ歩きさせる。
         }
-        else if (!(Input.GetKey(KeyCode.LeftShift)) &&
-                  (Input.GetKey(KeyCode.DownArrow)))
+        else if (!(Input.GetKey(KeyCode.LeftShift)) && Input.GetKey(KeyCode.RightArrow)) //右キーが押されていれば
         {
-            // 人を右へカニ歩き
-            hrb.position = hrb.position + (transform.right * Time.deltaTime * 7.0f);
+            hrb.position = hrb.position + (transform.right * Time.deltaTime * 7.0f); //人を右へカニ歩きさせる。
         }
-
-        if(Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.UpArrow)))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.UpArrow)) //左側のShiftと上キーが押されていれば
         {
-            // カメラを上へ回転
-            transform.Rotate(new Vector3(-2.0f, 0.0f, 0.0f));
+            transform.Rotate(new Vector3(-2.0f, 0.0f, 0.0f)); //カメラを上へ回転。
         }
-        else if(Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.DownArrow)))
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.DownArrow)) //左側のShiftと下キーが押されていれば
         {
-            // カメラを下へ回転
-            transform.Rotate(new Vector3(2.0f, 0.0f, 0.0f));
+            transform.Rotate(new Vector3(2.0f, 0.0f, 0.0f)); //カメラを下へ回転。
         }
-
-        if(Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.LeftArrow)))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftArrow)) //左側のShiftと左キーが押されていれば
         {
-            // カメラを左へ回転
-            transform.Rotate(new Vector3(0.0f, -2.0f, 0.0f));
+            transform.Rotate(new Vector3(0.0f, -2.0f, 0.0f)); //カメラを左へ回転。
         }
-        else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightArrow)) //左側のShiftと右キーが押されていれば
         {
-            // カメラを右へ回転
-            transform.Rotate(new Vector3(0.0f, 2.0f, 0.0f));
+            transform.Rotate(new Vector3(0.0f, 2.0f, 0.0f)); //カメラを右へ回転。
         }
-
-        if(Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.R)))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.R)) //左側のShiftとRキーが押されていれば
         {
-            // カメラの回転をリセット
-            tf.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+            tf.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f); //カメラの回転をリセットする。
         }
     }
 }

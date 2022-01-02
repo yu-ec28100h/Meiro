@@ -5,69 +5,70 @@ using UnityEngine.UI;
 
 public class MazeStick : MonoBehaviour
 {
-    public int max_z;
-    public int max_x;
-    int x, z, r;
+    public int max_z; //フィールドの縦幅。5以上の奇数にすること。
+    public int max_x; //フィールドの横幅。5以上の奇数にすること。
+    int z; //フィールド配列の縦の要素番号
+    int x; //フィールド配列の横の要素番号
+    int r; //乱数の値
+    Object wall; //壁オブジェクト
+    GameObject wallgo; //壁のゲームオブジェクト
 
-    Object wall;
-    GameObject wallgo;
-
-    // Start is called before the first frame update
     void Start()
     {
-        int[,] field = new int[max_z, max_x];   // フィールド(0が通路、1が壁)
-        wall = Resources.Load("Wall");
+        int[,] field = new int[max_z, max_x]; //フィールド（0が通路で、1が壁。）
+        wall = Resources.Load("Wall"); //壁オブジェクトを読み込む。
 
-        for(z = 0; z < max_z; z++)
+        //通路（0）の生成
+        for (z = 0; z < max_z; z = z + 1) //フィールドの縦幅の分だけループする。
         {
-            for(x = 0; x < max_x; x++)
+            for (x = 0; x < max_x; x = x + 1) //フィールドの横幅の分だけループする。
             {
                 field[z, x] = 0;
             }
         }
 
-        // 上下の壁の作成
-        for(x = 0; x < max_x; x++)
+        //上下の外壁（1）の生成
+        for (x = 0; x < max_x; x = x + 1) //フィールドの横幅の分だけループする。
         {
             field[0, x] = 1;
             field[max_z - 1, x] = 1;
         }
-        // 左右の壁の作成
-        for(z = 0; z < max_z; z++)
+
+        //左右の外壁（1）の生成
+        for (z = 0; z < max_z; z = z + 1) //フィールドの縦幅の分だけループする。
         {
             field[z, 0] = 1;
-            field[z, max_z - 1] = 1;
+            field[z, max_x - 1] = 1;
         }
 
-        // 棒倒し法
-        z = 2;
-        for(x = 2; x < max_x - 1; x += 2)
+        //棒倒し法を使った壁（1）の生成（1行めのみ）
+        z = 2; //1行め
+        for (x = 2; x < max_x - 1; x = x + 2) //要素番号xが2から要素番号max_x-1の値まで、1マス飛ばしで棒倒し。
         {
-            r = Random.Range(1, 13);
-            field[z, x] = 1;
-            if(r <= 3)
+            r = Random.Range(1, 13); //乱数生成（r = 1から12のランダムな値）
+            field[z, x] = 1; //中心から……
+            if (r <= 3) //rが3以下のとき
             {
-                if(field[z-1,x] == 0)
+                if (field[z - 1, x] == 0) //上に棒（壁）がなければ
                 {
-                    field[z - 1, x] = 1;
+                    field[z - 1, x] = 1; //上に棒を倒す。
                 }
-                else if(field[z - 1, x] == 1)
+                else if (field[z - 1, x] == 1) //上に棒（壁）があれば
                 {
-                    x -= 2;
+                    x = x - 2; //棒を倒さずに、乱数生成をやり直す。
                 }
             }
-            if(r >= 4 && r <= 6)
+            if (r >= 4 && r <= 6) //rが4から6のとき
             {
-                if(field[z+1, x] == 0)
+                if (field[z + 1, x] == 0) //下に棒（壁）がなければ
                 {
-                    field[z + 1, x] = 1;
+                    field[z + 1, x] = 1; //下に棒を倒す。
                 }
-                else if(field[z + 1, x] == 1)
+                else if (field[z + 1, x] == 1) //下に棒（壁）があれば
                 {
-                    x -= 2;
+                    x = x - 2; //棒を倒さずに、乱数生成をやり直す。
                 }
             }
-
             if (r >= 7 && r <= 9) //rが7から9のとき
             {
                 if (field[z, x - 1] == 0) //左に棒（壁）がなければ
@@ -79,7 +80,7 @@ public class MazeStick : MonoBehaviour
                     x = x - 2; //棒を倒さずに、乱数生成をやり直す。
                 }
             }
-            if(r >= 10)
+            if (r >= 10) //rが10以上のとき
             {
                 if (field[z, x + 1] == 0) //右に棒（壁）がなければ
                 {
@@ -92,6 +93,7 @@ public class MazeStick : MonoBehaviour
             }
         }
 
+        //棒倒し法を使った壁（1）の生成（2行め以降）
         for (z = 4; z < max_z - 1; z = z + 2) //zの要素番号4から要素番号max_z-1まで、1マス飛ばしで棒倒し。
         {
             for (x = 2; x < max_x - 1; x = x + 2) //xの要素番号2から要素番号max_x-1まで、1マス飛ばしで棒倒し。
